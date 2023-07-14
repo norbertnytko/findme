@@ -1,3 +1,3 @@
 Rails.application.routes.draw do
-  resources :one_pagers, only: :show
+  resources :one_pagers, only: [:show, :edit]
 end
