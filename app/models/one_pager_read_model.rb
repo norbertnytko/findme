@@ -1,0 +1,2 @@
+class OnePagerReadModel < ApplicationRecord
+end

@@ -4,6 +4,21 @@ module OnePagers
     class OnePagerDrafted < RailsEventStore::Event; end
   end
 
+  class OnePagerReadModelProjection
+    def call(event)
+      one_pager_read_model = OnePagerReadModel.find_or_initialize_by(id: event.data[:id])
+      case event
+      when Events::OnePagerPublished
+        one_pager_read_model.published_at = event.data[:published_at]
+        one_pager_read_model.state = 'published'
+      when Events::OnePagerDrafted
+        one_pager_read_model.published_at = nil
+        one_pager_read_model.state = 'drafted'
+      end
+      one_pager_read_model.save!
+    end
+  end
+
   class OnePager
     include AggregateRoot
     class AlreadyPublished < StandardError; end
@@ -14,12 +29,12 @@ module OnePagers
     end
 
     def draft
-      apply Events::OnePagerDrafted.new(data: { published_at: nil })
+      apply Events::OnePagerDrafted.new(data: { id: @id, published_at: nil })
     end
   
     def publish
       raise AlreadyPublished if state == :published
-      apply Events::OnePagerPublished.new(data: { published_at: Time.now })
+      apply Events::OnePagerPublished.new(data: { id: @id, published_at: Time.now })
     end
   
     on Events::OnePagerPublished do |event|
