@@ -1,0 +1,25 @@
+<div class="flex justify-center w-full mx-auto">
+  <div>
+    <div id="<%= dom_id @one_pager %>" class="card">
+      <div class="flex flex-col items-center space-y-4 text-center card-body">
+        <div class="avatar">
+        <div class="w-24 rounded-full">
+          <div class= "inline-flex items-center justify-center w-full h-full rounded-full bg-primary">
+            <span class="text-4xl font-medium leading-none"><%= one_pager&.name[0]&.upcase %></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="card-title">
+        <%= one_pager.name %>
+      </div>
+
+      <div class="flex flex-col space-y-4">
+          <%= link_to("Sample Link", '#', target: :_blank,
+              class: "btn btn-outline w-full py-2 lg:py-3") %>
+      </div>
+    </div>
+  </div>
+</div>

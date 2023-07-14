@@ -5,7 +5,10 @@ Rails.configuration.to_prepare do
 
   event_store.subscribe(OnePagers::OnePagerReadModelProjection.new, to: [
     OnePagers::Events::OnePagerPublished,
-    OnePagers::Events::OnePagerDrafted
+    OnePagers::Events::OnePagerDrafted,
+    OnePagers::Events::OnePagerAssignedName,
+    OnePagers::Events::OnePagerAssignedSlug,
+    OnePagers::Events::OnePagerSelectedTheme
   ])
 end
 
