@@ -1,6 +1,5 @@
 <%= form_for(
   one_pager,
-  url: one_pager_path,
   as: :one_pager,
   class: "p-10 card bg-base-200") do |form| %>
 
@@ -12,5 +11,5 @@
   </div>
 
   <div class="divider"></div> 
-  <%= form.submit "Update", class: "btn" %>
+  <%= form.submit class: "btn" %>
 <% end %>

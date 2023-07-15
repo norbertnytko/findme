@@ -1,0 +1,20 @@
+<div class="container p-4 mx-auto">
+  <div class="p-10 card bg-base-200">
+    <div class="card-body">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-2xl font-bold">One Pagers</h2>
+        <%= link_to "New One Pager", new_one_pager_path, class: "btn btn-primary" %>
+      </div>
+      <ul class="space-y-2">
+        <% @one_pagers.each do |one_pager| %>
+          <li class="flex items-center space-x-2">
+            <span class="font-semibold"><%= one_pager.name %></span>
+            <span class="text-gray-500"><%= one_pager.slug %></span>
+            <%= link_to "Edit", edit_one_pager_path(one_pager), class: "btn btn-primary" %>
+            <%= link_to "Show", one_pager_path(one_pager), class: "btn btn-primary" %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>

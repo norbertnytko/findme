@@ -1,16 +1,24 @@
 class OnePagersController < ApplicationController
-  layout "admin", only: [:edit]
+  layout "one_pager", only: [:show]
+
+  def new
+    @one_pager = OnePager.new
+  end
+
+  def index
+    @one_pagers = OnePager.all
+  end
 
   def show
-    @one_pager = OnePagerReadModel.find_by_slug(params[:slug])
+    @one_pager = OnePager.find_by_slug(params[:slug])
   end
 
   def edit
-    @one_pager = OnePagerReadModel.find_by_slug(params[:slug])
+    @one_pager = OnePager.find_by_slug(params[:slug])
   end
 
   def update
-    @one_pager = OnePagerReadModel.find_by_slug(params[:slug])
+    @one_pager = OnePager.find_by_slug(params[:slug])
 
     if one_pager_params[:theme].present?
       select_theme = OnePagers::Commands::SelectTheme.new(

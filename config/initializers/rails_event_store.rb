@@ -5,13 +5,14 @@ require "arkency/command_bus/alias"
 Rails.configuration.to_prepare do
   Rails.configuration.event_store = event_store = RailsEventStore::JSONClient.new
 
-  event_store.subscribe(OnePagers::OnePagerReadModelProjection.new, to: [
+  event_store.subscribe(OnePagers::OnePagerProjection.new, to: [
     OnePagers::Events::OnePagerPublished,
     OnePagers::Events::OnePagerDrafted,
     OnePagers::Events::OnePagerAssignedName,
     OnePagers::Events::OnePagerAssignedSlug,
     OnePagers::Events::OnePagerSelectedTheme,
-    OnePagers::Events::OnePagerLinkAdded
+    OnePagers::Events::OnePagerLinkAdded,
+    OnePagers::Events::OnePagerLinkRemoved
   ])
 
   event_store.subscribe(OnePagers::ThemeBroadcaster.new, to: [

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-theme="<%= @one_pager.theme %>">
+<html>
   <head>
     <title>FindMe</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -12,7 +12,7 @@
     <%= action_cable_meta_tag %>
   </head>
 
-  <body data-one-pager-id="<%= @one_pager.id %>">
+  <body>
     <main class="container mx-auto mt-28 px-5 flex">
       <%= yield %>
     </main>

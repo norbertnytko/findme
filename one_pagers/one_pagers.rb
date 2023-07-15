@@ -10,6 +10,7 @@ module OnePagers
     class OnePagerAssignedSlug < RailsEventStore::Event; end
     class OnePagerSelectedTheme < RailsEventStore::Event; end
     class OnePagerLinkAdded < RailsEventStore::Event; end
+    class OnePagerLinkRemoved < RailsEventStore::Event; end
   end
 
   module Commands
@@ -43,9 +44,9 @@ module OnePagers
     end
   end
 
-  class OnePagerReadModelProjection
+  class OnePagerProjection
     def call(event)
-      one_pager_read_model = OnePagerReadModel.find_or_initialize_by(id: event.data[:id])
+      one_pager_read_model = ::OnePager.find_or_initialize_by(id: event.data[:id])
       case event
       when Events::OnePagerPublished
         one_pager_read_model.published_at = event.data[:published_at]
@@ -61,6 +62,8 @@ module OnePagers
         one_pager_read_model.theme = event.data[:theme]
       when Events::OnePagerLinkAdded
         one_pager_read_model.links.build(name: event.data[:name], url: event.data[:url], id: event.data[:link_id])
+      when Events::OnePagerLinkRemoved
+        one_pager_read_model.links.find_by(id: event.data[:link_id]).destroy
       end
 
       one_pager_read_model.save!
@@ -103,6 +106,10 @@ module OnePagers
     def add_link(name:, url:, link_id:)
       apply Events::OnePagerLinkAdded.new(data: { id: @id, name: name, url: url, link_id: link_id})
     end
+
+    def remove_link(link_id:)
+      apply Events::OnePagerLinkRemoved.new(data: { id: @id, link_id: link_id})
+    end
   
     on Events::OnePagerPublished do |event|
       @state = :published
@@ -133,6 +140,10 @@ module OnePagers
         name: event.data.fetch(:name),
         url: event.data.fetch(:url)
       )
+    end
+
+    on Events::OnePagerLinkRemoved do |event|
+      @links.delete_if { |link| link.id == event.data.fetch(:link_id) }
     end
   end
 
