@@ -25,6 +25,12 @@ module OnePagers
     end
   end
 
+  class ThemeBroadcaster
+    def call(event)
+      ActionCable.server.broadcast("theme_change:#{event.data[:id]}", { theme: event.data[:theme]})
+    end
+  end
+
   class OnePagerReadModelProjection
     def call(event)
       one_pager_read_model = OnePagerReadModel.find_or_initialize_by(id: event.data[:id])
@@ -41,9 +47,8 @@ module OnePagers
         one_pager_read_model.slug = event.data[:slug]
       when Events::OnePagerSelectedTheme
         one_pager_read_model.theme = event.data[:theme]
-        ActionCable.server.broadcast("theme_change:#{one_pager_read_model.id}", { theme: event.data[:theme]})
-
       end
+
       one_pager_read_model.save!
     end
   end

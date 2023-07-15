@@ -13,6 +13,10 @@ Rails.configuration.to_prepare do
     OnePagers::Events::OnePagerSelectedTheme
   ])
 
+  event_store.subscribe(OnePagers::ThemeBroadcaster.new, to: [
+    OnePagers::Events::OnePagerSelectedTheme
+  ])
+
   Rails.configuration.command_bus = command_bus = CommandBus.new
   register = command_bus.method(:register)
 
