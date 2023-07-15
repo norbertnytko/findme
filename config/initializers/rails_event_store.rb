@@ -24,7 +24,10 @@ Rails.configuration.to_prepare do
 
   {
     OnePagers::Commands::SelectTheme => OnePagers::OnSelectTheme.new(event_store: event_store),
-    OnePagers::Commands::AssignName => OnePagers::OnAssignName.new(event_store: event_store)
+    OnePagers::Commands::AssignName => OnePagers::OnAssignName.new(event_store: event_store),
+    OnePagers::Commands::AssignSlug => OnePagers::OnAssignSlug.new(event_store: event_store),
+    OnePagers::Commands::Draft => OnePagers::OnDraft.new(event_store: event_store),
+
   }.map(&register)
 
 end

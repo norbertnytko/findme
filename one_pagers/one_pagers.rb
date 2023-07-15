@@ -14,8 +14,20 @@ module OnePagers
   end
 
   module Commands
+    Draft = Struct.new(:aggregate_id, keyword_init: true)
+    AssignSlug = Struct.new(:aggregate_id, :slug, keyword_init: true)
     SelectTheme = Struct.new(:aggregate_id, :theme, keyword_init: true)
     AssignName = Struct.new(:aggregate_id, :name, keyword_init: true)
+  end
+
+  class OnDraft
+    def initialize(event_store)
+      @repository = OnePagers::OnePagerRepository.new
+    end
+
+    def call(command)
+      @repository.with_one_pager(command.aggregate_id) { |one_pager| one_pager.draft }
+    end
   end
 
   class OnSelectTheme
@@ -35,6 +47,16 @@ module OnePagers
 
     def call(command)
       @repository.with_one_pager(command.aggregate_id) { |one_pager| one_pager.assign_name(name: command.name) }
+    end
+  end
+
+  class OnAssignSlug
+    def initialize(event_store)
+      @repository = OnePagers::OnePagerRepository.new
+    end
+
+    def call(command)
+      @repository.with_one_pager(command.aggregate_id) { |one_pager| one_pager.assign_slug(slug: command.slug) }
     end
   end
 

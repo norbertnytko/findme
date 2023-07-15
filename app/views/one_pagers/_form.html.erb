@@ -10,6 +10,15 @@
     <%= form.text_field :name, class: "input" %>
   </div>
 
+  <% if one_pager.new_record? %>
+    <div class="form-control">
+      <%= form.label :slug do %>
+        <span class="label-text">Slug</span>
+      <% end %>
+      <%= form.text_field :slug, class: "input" %>
+    </div>
+  <% end %>
+
   <div class="divider"></div> 
   <%= form.submit class: "btn" %>
 <% end %>
