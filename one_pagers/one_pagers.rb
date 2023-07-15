@@ -11,6 +11,20 @@ module OnePagers
     class OnePagerSelectedTheme < RailsEventStore::Event; end
   end
 
+  module Commands
+    SelectTheme = Struct.new(:aggregate_id, :theme, keyword_init: true)
+  end
+
+  class OnSelectTheme
+    def initialize(event_store)
+      @repository = OnePagers::OnePagerRepository.new
+    end
+
+    def call(command)
+      @repository.with_one_pager(command.aggregate_id) { |one_pager| one_pager.select_theme(theme: command.theme) }
+    end
+  end
+
   class OnePagerReadModelProjection
     def call(event)
       one_pager_read_model = OnePagerReadModel.find_or_initialize_by(id: event.data[:id])

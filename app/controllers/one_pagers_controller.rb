@@ -12,8 +12,7 @@ class OnePagersController < ApplicationController
   def update
     @one_pager = OnePagerReadModel.find_by_slug(params[:id])
 
-    id = @one_pager.id
-    repo = OnePagers::OnePagerRepository.new
-    repo.with_one_pager(id) { |one_pager| one_pager.select_theme(theme: params[:one_pager_read_model][:theme]) }
+    cmd = OnePagers::Commands::SelectTheme.new(aggregate_id: @one_pager.id, theme: params[:one_pager_read_model][:theme])
+    command_bus.(cmd)
   end
 end
