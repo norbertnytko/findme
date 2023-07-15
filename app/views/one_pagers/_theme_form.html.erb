@@ -1,6 +1,7 @@
-<%= form_with(
-  model: one_pager,
+<%= form_for(
+  one_pager,
   url: one_pager_path,
+  as: :one_pager,
   data: { controller: "one-pager-theme" },
   class: "p-10 card bg-base-200") do |form| %>
 
