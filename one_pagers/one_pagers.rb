@@ -23,6 +23,8 @@ module OnePagers
         one_pager_read_model.slug = event.data[:slug]
       when Events::OnePagerSelectedTheme
         one_pager_read_model.theme = event.data[:theme]
+        ActionCable.server.broadcast("theme_change:#{one_pager_read_model.id}", { theme: event.data[:theme]})
+
       end
       one_pager_read_model.save!
     end
@@ -99,7 +101,3 @@ module OnePagers
     attr_reader :repository
   end
 end
-
-# id = SecureRandom.uuid
-# repo = OnePagers::OnePagerRepository.new
-# repo.with_one_pager(id) { |one_pager| one_pager.select_theme(theme: 'retro') }

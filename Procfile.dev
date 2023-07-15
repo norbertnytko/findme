@@ -1,2 +1,5 @@
-web: bin/rails server -p 3000
+
 css: bin/rails tailwindcss:watch
+js: yarn build --watch
+anycable: bundle exec anycable
+ws: anycable-go --port=8080 --broadcast_adapter=http
