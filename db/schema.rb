@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_14_201814) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_15_143227) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -38,6 +38,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_14_201814) do
     t.index ["stream", "position"], name: "index_event_store_events_in_streams_on_stream_and_position", unique: true
   end
 
+  create_table "link_read_models", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "one_pager_read_models_id", null: false
+    t.string "name"
+    t.string "url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["one_pager_read_models_id"], name: "index_link_read_models_on_one_pager_read_models_id"
+  end
+
   create_table "one_pager_read_models", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "slug"
     t.string "name"
@@ -48,4 +57,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_14_201814) do
     t.string "theme"
   end
 
+  add_foreign_key "link_read_models", "one_pager_read_models", column: "one_pager_read_models_id"
 end

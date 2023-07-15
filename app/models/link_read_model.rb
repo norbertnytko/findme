@@ -1,0 +1,2 @@
+class LinkReadModel < ApplicationRecord
+end

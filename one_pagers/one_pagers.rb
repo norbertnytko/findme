@@ -9,6 +9,7 @@ module OnePagers
     class OnePagerAssignedName < RailsEventStore::Event; end
     class OnePagerAssignedSlug < RailsEventStore::Event; end
     class OnePagerSelectedTheme < RailsEventStore::Event; end
+    class OnePagerLinkAdded < RailsEventStore::Event; end
   end
 
   module Commands
@@ -58,11 +59,15 @@ module OnePagers
         one_pager_read_model.slug = event.data[:slug]
       when Events::OnePagerSelectedTheme
         one_pager_read_model.theme = event.data[:theme]
+      when Events::OnePagerLinkAdded
+        one_pager_read_model.links.build(name: event.data[:name], url: event.data[:url], id: event.data[:link_id])
       end
 
       one_pager_read_model.save!
     end
   end
+
+  Link = Struct.new(:id, :one_pager_id, :name, :url, keyword_init: true)
 
   class OnePager
     include AggregateRoot
@@ -71,6 +76,7 @@ module OnePagers
     def initialize(id)
       @state = :draft
       @id = id
+      @links = []
     end
 
     def draft
@@ -78,7 +84,7 @@ module OnePagers
     end
   
     def publish
-      raise AlreadyPublished if state == :published
+      raise AlreadyPublished if @state == :published
       apply Events::OnePagerPublished.new(data: { id: @id, published_at: Time.now })
     end
 
@@ -92,6 +98,10 @@ module OnePagers
 
     def select_theme(theme:)
       apply Events::OnePagerSelectedTheme.new(data: { id: @id, theme: theme })
+    end
+
+    def add_link(name:, url:, link_id:)
+      apply Events::OnePagerLinkAdded.new(data: { id: @id, name: name, url: url, link_id: link_id})
     end
   
     on Events::OnePagerPublished do |event|
@@ -115,10 +125,15 @@ module OnePagers
     on Events::OnePagerSelectedTheme do |event|
       @theme = event.data.fetch(:theme)
     end
-  
-    private
-  
-    attr_reader :state
+
+    on Events::OnePagerLinkAdded do |event|
+      @links << Link.new(
+        id: event.data.fetch(:link_id),
+        one_pager_id: @id,
+        name: event.data.fetch(:name),
+        url: event.data.fetch(:url)
+      )
+    end
   end
 
   class OnePagerRepository

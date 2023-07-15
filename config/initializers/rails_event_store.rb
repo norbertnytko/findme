@@ -10,7 +10,8 @@ Rails.configuration.to_prepare do
     OnePagers::Events::OnePagerDrafted,
     OnePagers::Events::OnePagerAssignedName,
     OnePagers::Events::OnePagerAssignedSlug,
-    OnePagers::Events::OnePagerSelectedTheme
+    OnePagers::Events::OnePagerSelectedTheme,
+    OnePagers::Events::OnePagerLinkAdded
   ])
 
   event_store.subscribe(OnePagers::ThemeBroadcaster.new, to: [
