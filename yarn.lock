@@ -112,6 +112,16 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.18.12.tgz#1da26735ce5954bf914f8f2117b5096c548bbba2"
   integrity sha512-O0UYQVkvfM/jO8a4OwoV0mAKSJw+mjWTAd1MJd/1FCX6uiMdLmMRPK/w6e9OQ0ob2WGxzIm9va/KG0Ja4zIOgg==
 
+"@hotwired/stimulus-webpack-helpers@^1.0.0":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@hotwired/stimulus-webpack-helpers/-/stimulus-webpack-helpers-1.0.1.tgz#4cd74487adeca576c9865ac2b9fe5cb20cef16dd"
+  integrity sha512-wa/zupVG0eWxRYJjC1IiPBdt3Lruv0RqGN+/DTMmUWUyMAEB27KXmVY6a8YpUVTM7QwVuaLNGW4EqDgrS2upXQ==
+
+"@hotwired/stimulus@^3.2.1":
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/@hotwired/stimulus/-/stimulus-3.2.1.tgz#e3de23623b0c52c247aba4cd5d530d257008676b"
+  integrity sha512-HGlzDcf9vv/EQrMJ5ZG6VWNs8Z/xMN+1o2OhV1gKiSG6CqZt5MCBB1gRg5ILiN3U0jEAxuDTNPRfBcnZBDmupQ==
+
 "@rails/actioncable@^7.0.6":
   version "7.0.6"
   resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-7.0.6.tgz#60765c8e9c357a0ba0840fb1e409caedc233ea0d"
@@ -144,3 +154,11 @@ esbuild@^0.18.12:
     "@esbuild/win32-arm64" "0.18.12"
     "@esbuild/win32-ia32" "0.18.12"
     "@esbuild/win32-x64" "0.18.12"
+
+stimulus@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/stimulus/-/stimulus-3.2.1.tgz#bf049a4379ed4ff7475515acce1f0b6fa15a0187"
+  integrity sha512-EhpuHnTwtkWrE5m7tQxLBLsi1aE6xJ/9MbB88aKXZSquIC4pCueKJ2AGaF5gq+/BzP7+xvYaVYA0j1dIUuBsgA==
+  dependencies:
+    "@hotwired/stimulus" "^3.2.1"
+    "@hotwired/stimulus-webpack-helpers" "^1.0.0"
