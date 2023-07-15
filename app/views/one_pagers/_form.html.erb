@@ -1,0 +1,16 @@
+<%= form_for(
+  one_pager,
+  url: one_pager_path,
+  as: :one_pager,
+  class: "p-10 card bg-base-200") do |form| %>
+
+  <div class="form-control">
+    <%= form.label :name do %>
+      <span class="label-text">Name</span>
+    <% end %>
+    <%= form.text_field :name, class: "input" %>
+  </div>
+
+  <div class="divider"></div> 
+  <%= form.submit "Update", class: "btn" %>
+<% end %>

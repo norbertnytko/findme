@@ -21,7 +21,8 @@ Rails.configuration.to_prepare do
   register = command_bus.method(:register)
 
   {
-    OnePagers::Commands::SelectTheme => OnePagers::OnSelectTheme.new(event_store: event_store).method(:call),
+    OnePagers::Commands::SelectTheme => OnePagers::OnSelectTheme.new(event_store: event_store),
+    OnePagers::Commands::AssignName => OnePagers::OnAssignName.new(event_store: event_store)
   }.map(&register)
 
 end
