@@ -6,7 +6,7 @@
           <%= render 'form', one_pager: @one_pager %>
           <div class="divider"></div>
           <div id="links">
-            <%= render(partial: 'link_form', collection: @one_pager.links, as: :link) %>
+            <%= render(partial: 'links/form', collection: @one_pager.links, as: :link, locals: { one_pager: @one_pager }) %>
           </div>
           <div class="divider"></div>
           <%= render 'theme_form', one_pager: @one_pager %>

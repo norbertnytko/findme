@@ -12,7 +12,9 @@ module ReadModels
         OnePagers::Events::OnePagerAssignedSlug,
         OnePagers::Events::OnePagerSelectedTheme,
         OnePagers::Events::OnePagerLinkAdded,
-        OnePagers::Events::OnePagerLinkRemoved
+        OnePagers::Events::OnePagerLinkRemoved,
+        OnePagers::Events::OnePagerLinkUrlChanged,
+        OnePagers::Events::OnePagerLinkNameChanged
       ])
 
       event_store.subscribe(OnePager::ThemeBroadcaster.new, to: [
@@ -43,6 +45,10 @@ module ReadModels
         one_pager_read_model.links.build(name: event.data[:name], url: event.data[:url], id: event.data[:link_id])
       when OnePagers::Events::OnePagerLinkRemoved
         one_pager_read_model.links.find_by(id: event.data[:link_id]).destroy
+      when OnePagers::Events::OnePagerLinkUrlChanged
+        one_pager_read_model.links.find_by(id: event.data[:link_id]).update_attribute(:url, event.data[:url])
+      when OnePagers::Events::OnePagerLinkNameChanged
+        one_pager_read_model.links.find_by(id: event.data[:link_id]).update_attribute(:name, event.data[:name])
       end
 
       one_pager_read_model.save!

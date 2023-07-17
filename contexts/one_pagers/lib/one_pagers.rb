@@ -24,6 +24,8 @@ module OnePagers
     class OnePagerSelectedTheme < RailsEventStore::Event; end
     class OnePagerLinkAdded < RailsEventStore::Event; end
     class OnePagerLinkRemoved < RailsEventStore::Event; end
+    class OnePagerLinkNameChanged < RailsEventStore::Event; end
+    class OnePagerLinkUrlChanged < RailsEventStore::Event; end
   end
 
   module Commands
@@ -110,6 +112,20 @@ module OnePagers
       apply Events::OnePagerLinkAdded.new(data: { id: @id, name: name, url: url, link_id: link_id})
     end
 
+    def change_link_name(name: , link_id:)
+      link = @links.find { |link| link.id == link_id }
+      return if name == link.name
+
+      apply Events::OnePagerLinkNameChanged.new(data: { id: @id, name: name, link_id: link_id})
+    end
+
+    def change_link_url(url:, link_id:)
+      link = @links.find { |link| link.id == link_id }
+      return if url == link.url
+
+      apply Events::OnePagerLinkUrlChanged.new(data: { id: @id, url: url, link_id: link_id})
+    end
+
     def remove_link(link_id:)
       apply Events::OnePagerLinkRemoved.new(data: { id: @id, link_id: link_id})
     end
@@ -143,6 +159,18 @@ module OnePagers
         name: event.data.fetch(:name),
         url: event.data.fetch(:url)
       )
+    end
+
+    on Events::OnePagerLinkNameChanged do |event|
+      link_to_modify = @links.find { |link| link.id == event.data.fetch(:link_id) }
+
+      link_to_modify.name = event.data.fetch(:name)
+    end
+
+    on Events::OnePagerLinkUrlChanged do |event|
+      link_to_modify = @links.find { |link| link.id == event.data.fetch(:link_id) }
+
+      link_to_modify.url = event.data.fetch(:url)
     end
 
     on Events::OnePagerLinkRemoved do |event|
