@@ -3,6 +3,35 @@ module OnePagers
     "valentine", "halloween", "garden", "forest", "aqua", "lofi", "pastel", "fantasy", "wireframe", "black", "luxury",
     "dracula", "cmyk", "autumn", "business", "acid", "lemonade", "night", "coffee", "winter"]
 
+  class Configuration
+    def call(event_store:, command_bus:)
+      register = command_bus.method(:register)
+
+      {
+        OnePagers::Commands::SelectTheme => OnePagers::OnSelectTheme.new(event_store: event_store),
+        OnePagers::Commands::AssignName => OnePagers::OnAssignName.new(event_store: event_store),
+        OnePagers::Commands::AssignSlug => OnePagers::OnAssignSlug.new(event_store: event_store),
+        OnePagers::Commands::Draft => OnePagers::OnDraft.new(event_store: event_store),
+    
+      }.map(&register)
+
+      # Move this to Infra module
+      event_store.subscribe(OnePagers::OnePagerProjection.new, to: [
+        OnePagers::Events::OnePagerPublished,
+        OnePagers::Events::OnePagerDrafted,
+        OnePagers::Events::OnePagerAssignedName,
+        OnePagers::Events::OnePagerAssignedSlug,
+        OnePagers::Events::OnePagerSelectedTheme,
+        OnePagers::Events::OnePagerLinkAdded,
+        OnePagers::Events::OnePagerLinkRemoved
+      ])
+
+      event_store.subscribe(OnePagers::ThemeBroadcaster.new, to: [
+        OnePagers::Events::OnePagerSelectedTheme
+      ])
+    end
+  end
+
   module Events
     class OnePagerPublished < RailsEventStore::Event; end
     class OnePagerDrafted < RailsEventStore::Event; end

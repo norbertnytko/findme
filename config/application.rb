@@ -33,6 +33,5 @@ module FindMe
 
     # Don't generate system test files.
     config.generators.system_tests = nil
-    config.paths.add 'one_pagers', eager_load: true, autoload: true
   end
 end
