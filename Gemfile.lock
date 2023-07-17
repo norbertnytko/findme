@@ -68,19 +68,6 @@ GEM
       tzinfo (~> 2.0)
     aggregate_root (2.9.1)
       ruby_event_store (= 2.9.1)
-    anycable (1.4.0)
-      anycable-core (= 1.4.0)
-      google-protobuf (~> 3.23)
-      grpc (~> 1.37)
-    anycable-core (1.4.0)
-      anyway_config (~> 2.2)
-      google-protobuf (>= 3.13)
-    anycable-rails (1.4.0)
-      actioncable (>= 6.0)
-      anycable (~> 1.4)
-      globalid
-    anyway_config (2.4.2)
-      ruby-next-core (>= 0.14.0)
     arkency-command_bus (0.4.1)
       concurrent-ruby
     bindex (0.8.1)
@@ -97,12 +84,6 @@ GEM
     erubi (1.12.0)
     globalid (1.1.0)
       activesupport (>= 5.0)
-    google-protobuf (3.23.4-arm64-darwin)
-    googleapis-common-protos-types (1.6.0)
-      google-protobuf (~> 3.14)
-    grpc (1.56.0)
-      google-protobuf (~> 3.23)
-      googleapis-common-protos-types (~> 1.0)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     jbuilder (2.11.5)
@@ -202,7 +183,6 @@ GEM
       rspec-mocks (~> 3.12)
       rspec-support (~> 3.12)
     rspec-support (3.12.1)
-    ruby-next-core (0.15.3)
     ruby_event_store (2.9.1)
       concurrent-ruby (~> 1.0, >= 1.1.6)
     ruby_event_store-active_record (2.9.1)
@@ -242,9 +222,9 @@ GEM
 
 PLATFORMS
   arm64-darwin-20
+  arm64-darwin-22
 
 DEPENDENCIES
-  anycable-rails (~> 1.4)
   bootsnap
   cssbundling-rails
   jbuilder

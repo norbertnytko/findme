@@ -3,6 +3,7 @@
   "private": "true",
   "dependencies": {
     "@rails/actioncable": "^7.0.6",
+    "daisyui": "^3.2.1",
     "esbuild": "^0.18.12",
     "stimulus": "^3.2.1"
   },
