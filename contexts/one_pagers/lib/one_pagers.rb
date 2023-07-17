@@ -12,23 +12,7 @@ module OnePagers
         OnePagers::Commands::AssignName => OnePagers::OnAssignName.new(event_store: event_store),
         OnePagers::Commands::AssignSlug => OnePagers::OnAssignSlug.new(event_store: event_store),
         OnePagers::Commands::Draft => OnePagers::OnDraft.new(event_store: event_store),
-    
       }.map(&register)
-
-      # Move this to Infra module
-      event_store.subscribe(OnePagers::OnePagerProjection.new, to: [
-        OnePagers::Events::OnePagerPublished,
-        OnePagers::Events::OnePagerDrafted,
-        OnePagers::Events::OnePagerAssignedName,
-        OnePagers::Events::OnePagerAssignedSlug,
-        OnePagers::Events::OnePagerSelectedTheme,
-        OnePagers::Events::OnePagerLinkAdded,
-        OnePagers::Events::OnePagerLinkRemoved
-      ])
-
-      event_store.subscribe(OnePagers::ThemeBroadcaster.new, to: [
-        OnePagers::Events::OnePagerSelectedTheme
-      ])
     end
   end
 
@@ -86,38 +70,6 @@ module OnePagers
 
     def call(command)
       @repository.with_one_pager(command.aggregate_id) { |one_pager| one_pager.assign_slug(slug: command.slug) }
-    end
-  end
-
-  class ThemeBroadcaster
-    def call(event)
-      ActionCable.server.broadcast("theme_change:#{event.data[:id]}", { theme: event.data[:theme]})
-    end
-  end
-
-  class OnePagerProjection
-    def call(event)
-      one_pager_read_model = ::OnePager.find_or_initialize_by(id: event.data[:id])
-      case event
-      when Events::OnePagerPublished
-        one_pager_read_model.published_at = event.data[:published_at]
-        one_pager_read_model.state = :published
-      when Events::OnePagerDrafted
-        one_pager_read_model.published_at = nil
-        one_pager_read_model.state = :drafted
-      when Events::OnePagerAssignedName
-        one_pager_read_model.name = event.data[:name]
-      when Events::OnePagerAssignedSlug
-        one_pager_read_model.slug = event.data[:slug]
-      when Events::OnePagerSelectedTheme
-        one_pager_read_model.theme = event.data[:theme]
-      when Events::OnePagerLinkAdded
-        one_pager_read_model.links.build(name: event.data[:name], url: event.data[:url], id: event.data[:link_id])
-      when Events::OnePagerLinkRemoved
-        one_pager_read_model.links.find_by(id: event.data[:link_id]).destroy
-      end
-
-      one_pager_read_model.save!
     end
   end
 
