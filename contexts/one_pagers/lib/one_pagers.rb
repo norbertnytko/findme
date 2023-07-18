@@ -111,6 +111,8 @@ module OnePagers
 
     def add_link(name:, url:, link_id:)
       apply Events::OnePagerLinkAdded.new(data: { id: @id, name: name, url: url, link_id: link_id})
+
+      reorder_links(link_id: link_id, new_position: 1)
     end
 
     def change_link_name(name: , link_id:)
@@ -129,6 +131,9 @@ module OnePagers
 
     def remove_link(link_id:)
       apply Events::OnePagerLinkRemoved.new(data: { id: @id, link_id: link_id})
+
+      refresh_links_positions
+      apply Events::OnePagerLinksReordered.new(data: { id: @id, links: @links.map { |link| { link_id: link.id, position: link.position } } })
     end
 
     def reorder_links(link_id:, new_position:)

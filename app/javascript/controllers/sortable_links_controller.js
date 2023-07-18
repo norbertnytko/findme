@@ -10,7 +10,6 @@ export default class extends Sortable {
 
   onUpdate(event) {
     super.onUpdate(event)
-    console.log(event)
   }
 
   onUpdate(event) {
