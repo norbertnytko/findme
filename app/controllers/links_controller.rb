@@ -2,32 +2,60 @@
 
 class LinksController < ApplicationController
   def create
-    repository = OnePagers::OnePagerRepository.new
-    id = SecureRandom.id
+    @one_pager = OnePager.find_by_slug(params[:one_pager_slug])
 
-    repository.with_one_pager(id) do |one_pager|
-      one_pager.add_link(name: link_params[:name], url: link_params[:url])
+    repository = OnePagers::OnePagerRepository.new
+    id = SecureRandom.uuid
+
+    @link = @one_pager.links.build(link_params.merge(id: id))
+
+    repository.with_one_pager(@one_pager.id) do |one_pager|
+      one_pager.add_link(name: link_params[:name], url: link_params[:url], link_id: id)
+    end
+  end
+
+  def edit
+    @one_pager = OnePager.find_by_slug(params[:one_pager_slug])
+    @link = @one_pager.links.find_by_id(params[:id])
+
+    respond_to do |format|
+      format.turbo_stream
     end
   end
 
   def update
     repository = OnePagers::OnePagerRepository.new
-    link = Link.find(params[:id])
+    @link = Link.find(params[:id])
+    @one_pager = OnePager.find_by_slug(params[:one_pager_slug])
 
-    repository.with_one_pager(link.one_pagers_id) do |one_pager|
+    repository.with_one_pager(@one_pager.id) do |one_pager|
       one_pager.change_link_name(link_id: params[:id], name: link_params[:name]) if link_params[:name].present?
       one_pager.change_link_url(link_id: params[:id], url: link_params[:url]) if link_params[:url].present?
+    end
+
+    respond_to do |format|
+      format.turbo_stream
     end
   end
 
   def destroy
     repository = OnePagers::OnePagerRepository.new
-    link = Link.find(params[:id])
+    @link = Link.find(params[:id])
+    @one_pager = OnePager.find_by_slug(params[:one_pager_slug])
   
-    repository.with_one_pager(link.one_pagers_id) { |one_pager| one_pager.remove_link(link_id: params[:id]) }
+    repository.with_one_pager(@one_pager.id) { |one_pager| one_pager.remove_link(link_id: @link.id) }
 
     respond_to do |format|
-      format.html { redirect_to edit_one_pager_path(params[:one_pager_slug]), notice: 'Link removed' }
+      format.turbo_stream
+    end
+  end
+
+  def fields
+    @one_pager = OnePager.find_by_slug(params[:one_pager_slug])
+    @link = Link.new
+
+    respond_to do |format|
+      format.turbo_stream
     end
   end
 

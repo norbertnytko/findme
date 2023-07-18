@@ -1,0 +1,7 @@
+<%= turbo_stream.replace nested_dom_id(@one_pager, @link) do %> 
+  <%= render(partial: 'link', locals: { link: @link, one_pager: @one_pager }) %>
+<% end %>
+
+<%= turbo_stream.replace 'preview' do %>
+  <%= render partial: 'one_pagers/preview', locals: { one_pager: @one_pager } %>
+<% end %>

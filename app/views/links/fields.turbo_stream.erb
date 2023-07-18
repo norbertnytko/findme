@@ -1,0 +1,3 @@
+<%= turbo_stream.prepend "links" do %>
+  <%= render partial: 'links/form', locals: { link: @link, one_pager: @one_pager } %>
+<% end %>

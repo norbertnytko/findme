@@ -5,8 +5,9 @@
         <div class="card-body">
           <%= render 'form', one_pager: @one_pager %>
           <div class="divider"></div>
+          <%= link_to "Add a Link", fields_one_pager_links_path(@one_pager), data: { turbo_stream: true },  class: "btn" %>
           <div id="links">
-            <%= render(partial: 'links/form', collection: @one_pager.links, as: :link, locals: { one_pager: @one_pager }) %>
+            <%= render(partial: 'links/link', collection: @one_pager.links, as: :link, locals: { one_pager: @one_pager }) %>
           </div>
           <div class="divider"></div>
           <%= render 'theme_form', one_pager: @one_pager %>

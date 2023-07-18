@@ -2,17 +2,12 @@
   <p>Displayed name: <%= link.name %></p>
   <p>URL: <%= link.url %></p>
 
-  <%= form_with(model: [one_pager, link], data: { controller: "active-link" }) do |form| %>
-    <div class="form-control">
-      <%= form.label :active, class: "label cursor-pointer" do %>
-        <span class="label-text">Active</span>
-        <%= form.check_box :active, class: "toggle", checked: link.active?, data: { target: "form.checkbox", action: "change->active-link#onChange" }, id: "active_link_checkbox" %>
-      <% end %>
-    </div>
-  <% end %>
+  <%= link_to "Edit", edit_one_pager_link_path(one_pager, link), class: "btn", data: { turbo_stream: true } %>
+  <%= button_to "Delete",
+    one_pager_link_path(one_pager, link),
+    method: :delete,
+    class: "btn",
+    remote: true %>
 
-
-    <%= link_to "Edit", edit_one_pager_link_path(one_pager, link), class: "btn" %>
-  
   <div class="divider"></div> 
 <% end %>
