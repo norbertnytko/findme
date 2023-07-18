@@ -14,7 +14,8 @@ module ReadModels
         OnePagers::Events::OnePagerLinkAdded,
         OnePagers::Events::OnePagerLinkRemoved,
         OnePagers::Events::OnePagerLinkUrlChanged,
-        OnePagers::Events::OnePagerLinkNameChanged
+        OnePagers::Events::OnePagerLinkNameChanged,
+        OnePagers::Events::OnePagerLinksReordered
       ])
 
       event_store.subscribe(OnePager::ThemeBroadcaster.new, to: [
@@ -49,6 +50,10 @@ module ReadModels
         one_pager_read_model.links.find_by(id: event.data[:link_id]).update_attribute(:url, event.data[:url])
       when OnePagers::Events::OnePagerLinkNameChanged
         one_pager_read_model.links.find_by(id: event.data[:link_id]).update_attribute(:name, event.data[:name])
+      when OnePagers::Events::OnePagerLinksReordered
+        event.data[:links].each do |link|
+          one_pager_read_model.links.find_by(id: link[:link_id]).update_attribute(:position, link[:position])
+        end
       end
 
       one_pager_read_model.save!

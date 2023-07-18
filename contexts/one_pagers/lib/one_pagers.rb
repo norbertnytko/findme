@@ -26,6 +26,7 @@ module OnePagers
     class OnePagerLinkRemoved < RailsEventStore::Event; end
     class OnePagerLinkNameChanged < RailsEventStore::Event; end
     class OnePagerLinkUrlChanged < RailsEventStore::Event; end
+    class OnePagerLinksReordered < RailsEventStore::Event; end
   end
 
   module Commands
@@ -75,7 +76,7 @@ module OnePagers
     end
   end
 
-  Link = Struct.new(:id, :one_pager_id, :name, :url, keyword_init: true)
+  Link = Struct.new(:id, :one_pager_id, :name, :url, :position, keyword_init: true)
 
   class OnePager
     include AggregateRoot
@@ -129,6 +130,25 @@ module OnePagers
     def remove_link(link_id:)
       apply Events::OnePagerLinkRemoved.new(data: { id: @id, link_id: link_id})
     end
+
+    def reorder_links(link_id:, new_position:)
+      link = @links.find { |link| link.id == link_id }
+      return unless link
+
+      @links.delete(link)
+      @links.insert(new_position - 1, link)
+      refresh_links_positions
+
+      apply Events::OnePagerLinksReordered.new(data: { id: @id, links: @links.map { |link| { link_id: link.id, position: link.position } } })
+    end
+
+    private
+
+    def refresh_links_positions
+      @links.each_with_index do |link, index|
+        link.position = index
+      end
+    end
   
     on Events::OnePagerPublished do |event|
       @state = :published
@@ -175,6 +195,17 @@ module OnePagers
 
     on Events::OnePagerLinkRemoved do |event|
       @links.delete_if { |link| link.id == event.data.fetch(:link_id) }
+    end
+
+    on Events::OnePagerLinksReordered do |event|
+      links_data = event.data.fetch(:links)
+
+      links_data.each do |link_data|
+        link_id = link_data[:id]
+        position = link_data[:position]
+        link = @links.find { |link| link.id == link_id }
+        link.position = position if link
+      end
     end
   end
 

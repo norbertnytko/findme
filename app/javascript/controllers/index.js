@@ -6,3 +6,6 @@ import { application } from "./application"
 
 import OnePagerThemeController from "./one_pager_theme_controller"
 application.register("one-pager-theme", OnePagerThemeController)
+
+import SortableLinksController from "./sortable_links_controller"
+application.register("sortable-links", SortableLinksController)

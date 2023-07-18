@@ -1,1 +1,1 @@
-<%= turbo_stream.replace "link_#{@link.id}", render(partial: 'form', locals: { link: @link, one_pager: @one_pager }) %>
+<%= turbo_stream.replace dom_id(@link), render(partial: 'form', locals: { link: @link, one_pager: @one_pager }) %>

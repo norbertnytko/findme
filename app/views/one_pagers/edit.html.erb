@@ -5,8 +5,8 @@
       <div class="mt-4">
         <%= link_to "Add a Link", fields_one_pager_links_path(@one_pager), data: { turbo_stream: true }, class: "btn btn-primary" %>
       </div>
-      <div id="links" class="mt-4">
-        <%= render(partial: 'links/link', collection: @one_pager.links, as: :link, locals: { one_pager: @one_pager }) %>
+      <div id="links" data-controller="sortable-links" data-sortable-links-resource-name-value="link" class="mt-4">
+        <%= render(partial: 'links/link', collection: @one_pager.links.order(position: :asc), as: :link, locals: { one_pager: @one_pager }) %>
       </div>
       <div class="mt-4">
         <%= render 'theme_form', one_pager: @one_pager %>

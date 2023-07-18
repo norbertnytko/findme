@@ -17,7 +17,7 @@
       </div>
 
       <div class="flex flex-col space-y-4">
-        <% one_pager.links.each do |link| %>
+        <% one_pager.links.order(position: :asc).each do |link| %>
           <%= link_to(link.name, url_for(link.url), target: :_blank,
               class: "btn btn-outline w-full py-2 lg:py-3") %>
         <% end %>

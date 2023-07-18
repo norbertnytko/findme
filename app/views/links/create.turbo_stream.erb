@@ -1,4 +1,4 @@
-<%= turbo_stream.update nested_dom_id(@one_pager, Link.new), "" %>
+<%= turbo_stream.update dom_id(Link.new), "" %>
 
 <%= turbo_stream.prepend "links", render(partial: 'link', locals: { link: @link, one_pager: @one_pager }) %>
 

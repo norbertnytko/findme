@@ -1,4 +1,4 @@
-<%= turbo_stream.remove "link_#{@link.id}" %>
+<%= turbo_stream.remove dom_id(@link) %>
 
 <%= turbo_stream.replace 'preview' do %>
   <%= render partial: 'one_pagers/preview', locals: { one_pager: @one_pager } %>

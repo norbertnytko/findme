@@ -29,12 +29,17 @@ class LinksController < ApplicationController
     @one_pager = OnePager.find_by_slug(params[:one_pager_slug])
 
     repository.with_one_pager(@one_pager.id) do |one_pager|
+      one_pager.reorder_links(link_id: params[:id], new_position: link_params[:position].to_i) if link_params[:position].present?
       one_pager.change_link_name(link_id: params[:id], name: link_params[:name]) if link_params[:name].present?
       one_pager.change_link_url(link_id: params[:id], url: link_params[:url]) if link_params[:url].present?
     end
 
+    @link.reload # TODO: Think about this
+
     respond_to do |format|
       format.turbo_stream
+      format.json { head :no_content }
+      format.html { head :no_content }
     end
   end
 
@@ -70,6 +75,6 @@ class LinksController < ApplicationController
   private
 
   def link_params
-    params.require(:link).permit(:name, :url)
+    params.require(:link).permit(:name, :url, :position)
   end
 end

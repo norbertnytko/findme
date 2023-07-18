@@ -1,4 +1,4 @@
-<%= turbo_frame_tag(nested_dom_id(one_pager, link)) do %>
+<%= turbo_frame_tag(dom_id(link)) do %>
   <%= form_with(model: [one_pager, link], class: "bg-gray-50 shadow-md rounded-lg p-6 my-4") do |form| %>
 
     <div class="form-control mb-4">
@@ -21,7 +21,9 @@
     
     <div class="flex justify-between">
       <%= form.submit "Save", class: "btn btn-primary" %>
-      <%= link_to "Discard", discard_fields_one_pager_links_url(one_pager), class: "btn btn-error", data: { turbo_stream: true } %>
+      <% if link.new_record? %>
+        <%= link_to "Discard", discard_fields_one_pager_links_url(one_pager), class: "btn btn-error", data: { turbo_stream: true } %>
+      <% end %>
     </div>
 
   <% end %>
