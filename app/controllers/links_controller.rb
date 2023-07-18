@@ -59,6 +59,14 @@ class LinksController < ApplicationController
     end
   end
 
+  def discard_fields
+    @one_pager = OnePager.find_by_slug(params[:one_pager_slug])
+
+    respond_to do |format|
+      format.turbo_stream
+    end
+  end
+
   private
 
   def link_params

@@ -1,13 +1,13 @@
 <%= turbo_frame_tag dom_id(link) do %>
-  <p>Displayed name: <%= link.name %></p>
-  <p>URL: <%= link.url %></p>
-
-  <%= link_to "Edit", edit_one_pager_link_path(one_pager, link), class: "btn", data: { turbo_stream: true } %>
-  <%= button_to "Delete",
-    one_pager_link_path(one_pager, link),
-    method: :delete,
-    class: "btn",
-    remote: true %>
-
-  <div class="divider"></div> 
+  <div class="bg-gray-100 shadow-lg rounded-lg p-4 my-4">
+    <div class="mb-4">
+      <h2 class="text-2xl font-bold text-gray-900">Displayed name: <%= link.name %></h2>
+      <p class="mt-2 text-gray-600">URL: <%= link.url %></p>
+    </div>
+  
+    <div class="flex justify-between">
+      <%= link_to "Edit", edit_one_pager_link_path(one_pager, link), class: "btn btn-primary", data: { turbo_stream: true } %>
+      <%= button_to "Delete", one_pager_link_path(one_pager, link), method: :delete, class: "btn btn-error", data: { turbo_stream: true } %>
+    </div>
+  </div>
 <% end %>

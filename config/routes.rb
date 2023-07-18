@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     resources :links, only: [:create, :update, :destroy, :edit] do
       collection do
         get 'fields'
+        get 'discard_fields'
       end
     end
   end

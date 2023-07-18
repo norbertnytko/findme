@@ -1,32 +1,28 @@
 <%= turbo_frame_tag(nested_dom_id(one_pager, link)) do %>
-  <%= form_with(
-    model: [one_pager, link],
-    class: "p-10 card bg-base-200") do |form| %>
+  <%= form_with(model: [one_pager, link], class: "bg-gray-50 shadow-md rounded-lg p-6 my-4") do |form| %>
 
-    <div class="form-control">
-      <%= form.label :name do %>
+    <div class="form-control mb-4">
+      <%= form.label :name, class: "font-bold text-gray-600" do %>
         <span class="label-text">Displayed name</span>
       <% end %>
-      <%= form.text_field :name, class: "input" %>
+      <%= form.text_field :name, class: "input input-bordered w-full" %>
     </div>
 
-    <div class="form-control">
-      <%= form.label :url do %>
-        <span class="label-text">Url</span>
+    <div class="form-control mb-4">
+      <%= form.label :url, class: "font-bold text-gray-600" do %>
+        <span class="label-text">URL</span>
       <% end %>
 
-      <label class="input-group">
-        <span>https://</span> 
-        <%= form.text_field :url, class: "input" %>
-      </label>
+      <div class="input-group">
+        <span class="input-group-prepend">https://</span> 
+        <%= form.text_field :url, class: "input input-bordered w-full" %>
+      </div>
     </div>
     
-    <div class="divider"></div> 
-    <%= form.submit class: "btn" %>
-
-    <div class="divider"></div>
-
+    <div class="flex justify-between">
+      <%= form.submit "Save", class: "btn btn-primary" %>
+      <%= link_to "Discard", discard_fields_one_pager_links_url(one_pager), class: "btn btn-error", data: { turbo_stream: true } %>
+    </div>
 
   <% end %>
-
 <% end %>
