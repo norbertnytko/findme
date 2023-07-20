@@ -141,7 +141,7 @@ module OnePagers
       return unless link
 
       @links.delete(link)
-      @links.insert(new_position - 1, link)
+      @links.sort_by!(&:position).insert(new_position - 1, link)
       refresh_links_positions
 
       apply Events::OnePagerLinksReordered.new(data: { id: @id, links: @links.map { |link| { link_id: link.id, position: link.position } } })
@@ -205,8 +205,9 @@ module OnePagers
     on Events::OnePagerLinksReordered do |event|
       links_data = event.data.fetch(:links)
 
+
       links_data.each do |link_data|
-        link_id = link_data[:id]
+        link_id = link_data[:link_id]
         position = link_data[:position]
         link = @links.find { |link| link.id == link_id }
         link.position = position if link
