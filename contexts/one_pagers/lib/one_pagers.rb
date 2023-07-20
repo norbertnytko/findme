@@ -132,8 +132,7 @@ module OnePagers
     def remove_link(link_id:)
       apply Events::OnePagerLinkRemoved.new(data: { id: @id, link_id: link_id})
 
-      refresh_links_positions
-      apply Events::OnePagerLinksReordered.new(data: { id: @id, links: @links.map { |link| { link_id: link.id, position: link.position } } })
+      reorder_links(link_id: link_id, new_position: 1)
     end
 
     def reorder_links(link_id:, new_position:)
@@ -222,10 +221,7 @@ module OnePagers
   
     def with_one_pager(one_pager_id, &block)
       stream_name = "OnePager$#{one_pager_id}"
-      repository.with_aggregate(OnePager.new(one_pager_id), stream_name, &block)
+      @repository.with_aggregate(OnePager.new(one_pager_id), stream_name, &block)
     end
-  
-    private
-    attr_reader :repository
   end
 end
