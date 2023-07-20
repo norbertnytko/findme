@@ -9,10 +9,6 @@ export default class extends Sortable {
   }
 
   onUpdate(event) {
-    super.onUpdate(event)
-  }
-
-  onUpdate(event) {
     super.onUpdate(event).then(
       () => {
         let iframe = document.getElementById("iframe_preview");
