@@ -5,7 +5,7 @@
   data: { controller: "one-pager-theme" },
   class: "p-10 card bg-base-200") do |form| %>
 
-  <%= form.hidden_field :theme, value: one_pager.theme %>
+  <%= form.hidden_field :name, value: one_pager.name %>
 
   <div class="grid grid-cols-1 gap-4 rounded-box sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
     <% OnePagers::Types::Theme.values.each do |theme| %>
