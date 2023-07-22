@@ -1,5 +1,5 @@
 <%= turbo_frame_tag(dom_id(link)) do %>
-  <%= form_with(model: [one_pager, link], class: "bg-gray-50 shadow-md rounded-lg p-6 my-4") do |form| %>
+  <%= form_with(model: [one_pager, link], class: "bg-gray-50 shadow-md rounded-lg p-6 my-4", data: { controller: "url" }) do |form| %>
 
     <div class="form-control mb-4">
       <%= form.label :name, class: "font-bold text-gray-600" do %>
@@ -8,19 +8,16 @@
       <%= form.text_field :name, class: "input input-bordered w-full" %>
     </div>
 
-    <div class="form-control mb-4">
+    <div class="form-control mb-4" data-url-target="inputWrapper">
       <%= form.label :url, class: "font-bold text-gray-600" do %>
-        <span class="label-text">URL</span>
+        <span class="label-text">Url</span>
       <% end %>
-
-      <div class="input-group">
-        <span class="input-group-prepend">https://</span> 
-        <%= form.text_field :url, class: "input input-bordered w-full" %>
-      </div>
+      <%= form.text_field :url, data: { url_target: "input", action: "input->url#check" }, class: "input input-bordered w-full" %>
+      <p data-url-target="error" class="text-red-600 hidden">Provide valid url</p>
     </div>
     
     <div class="flex justify-between">
-      <%= form.submit "Save", class: "btn btn-primary" %>
+      <%= form.submit "Save", class: "btn btn-primary", data: { url_target: "submit" } %>
       <% if link.new_record? %>
         <%= link_to "Discard", discard_fields_one_pager_links_url(one_pager), class: "btn btn-error", data: { turbo_stream: true } %>
       <% end %>

@@ -9,3 +9,6 @@ application.register("one-pager-theme", OnePagerThemeController)
 
 import SortableLinksController from "./sortable_links_controller"
 application.register("sortable-links", SortableLinksController)
+
+import UrlController from "./url_controller"
+application.register("url", UrlController)
