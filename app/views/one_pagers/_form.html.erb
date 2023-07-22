@@ -10,6 +10,8 @@
     <%= form.text_field :name, class: "input" %>
   </div>
 
+  <%= form.hidden_field :theme, value: one_pager.theme %>
+
   <% if one_pager.new_record? %>
     <div class="form-control">
       <%= form.label :slug do %>

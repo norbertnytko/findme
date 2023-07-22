@@ -36,4 +36,56 @@ module Infra
       "#{aggregate_class.name}$#{aggregate_id}"
     end
   end
+
+  class Form
+    include ActiveModel::Model
+    include ActiveModel::Attributes
+
+    attr_accessor :existing_data
+
+    attribute :aggregate_id
+
+    class << self
+      def commands
+        @commands ||= []
+      end
+
+      def command(command_class, fields: nil)
+        commands << { command_class: command_class, fields: fields }
+      end
+    end
+
+    def submit(command_bus)
+      return false unless valid?
+
+      process_commands.each do |command|
+        begin
+          command_bus.(command)
+        rescue => e
+          errors.add(:base, e.message)
+          return false
+        end
+      end
+
+      true
+    end
+
+    private
+
+    def process_commands
+      self.class.commands.flat_map do |command_info|
+        command_attrs = command_info[:fields].map do |field| 
+          [field, public_send(field)] if should_produce_command?(field)
+        end.compact.to_h
+
+        command_attrs.present? ? [command_info[:command_class].new(command_attrs.merge(aggregate_id: aggregate_id))] : []
+      end
+    end
+
+    def should_produce_command?(field)
+      return true if existing_data.nil?
+
+      existing_data[field.to_s] != public_send(field)
+    end
+  end
 end
