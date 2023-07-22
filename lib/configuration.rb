@@ -1,3 +1,4 @@
+require_relative "../infra/lib/infra"
 require_relative "../contexts/configuration"
 require_relative "../app/read_models/configuration"
 

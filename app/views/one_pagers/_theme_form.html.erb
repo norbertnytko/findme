@@ -6,7 +6,7 @@
   class: "p-10 card bg-base-200") do |form| %>
 
   <div class="grid grid-cols-1 gap-4 rounded-box sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
-    <% OnePagers::THEMES.each do |theme| %>
+    <% OnePagers::Types::Theme.values.each do |theme| %>
       <label class="<%= one_pager.theme == theme ? 'outline' : '' %> border-base-content/20 hover:border-base-content/40 overflow-hidden rounded-lg border outline-2 outline-offset-2" data-set-theme="<%= theme %>" data-act-class="outline" data-one-pager-theme-target="label" <%= one_pager.theme == theme ? 'data-one-pager-theme-class="outline"' : '' %>>
         <%= form.radio_button :theme, theme, id: "theme_#{theme}", class: "hidden", data: { action: "change->one-pager-theme#change" } %>
         <div data-theme="<%= theme %>" class="w-full font-sans cursor-pointer bg-base-100 text-base-content">

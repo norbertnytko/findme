@@ -4,7 +4,7 @@ class LinksController < ApplicationController
   def create
     @one_pager = OnePager.find_by_slug(params[:one_pager_slug])
 
-    repository = OnePagers::OnePagerRepository.new
+    repository = OnePagers::Repository.new
     id = SecureRandom.uuid
 
     @link = @one_pager.links.build(link_params.merge(id: id))
@@ -24,7 +24,7 @@ class LinksController < ApplicationController
   end
 
   def update
-    repository = OnePagers::OnePagerRepository.new
+    repository = OnePagers::Repository.new
     @link = Link.find(params[:id])
     @one_pager = OnePager.find_by_slug(params[:one_pager_slug])
 
@@ -44,7 +44,7 @@ class LinksController < ApplicationController
   end
 
   def destroy
-    repository = OnePagers::OnePagerRepository.new
+    repository = OnePagers::Repository.new
     @link = Link.find(params[:id])
     @one_pager = OnePager.find_by_slug(params[:one_pager_slug])
   
