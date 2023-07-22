@@ -12,10 +12,12 @@ class OnePagersController < ApplicationController
   class CreateOnePagerForm < Infra::Form
     attribute :slug, :string
     attribute :name, :string
+    attribute :theme, :string
   
     command OnePagers::Commands::Draft, fields: []  # No fields for Draft command
     command OnePagers::Commands::AssignSlug, fields: %i(slug)
     command OnePagers::Commands::AssignName, fields: %i(name)
+    command OnePagers::Commands::SelectTheme, fields: %i(theme)
   
     validates :slug, presence: true
   end
@@ -29,24 +31,25 @@ class OnePagersController < ApplicationController
   end
 
   def new
-    @one_pager = OnePager.new
+    @create_one_pager_form = CreateOnePagerForm.new
   end
 
   def create
     id = SecureRandom.uuid
+    theme = OnePagers::Types::Theme.values.sample
 
-    create_one_pager_form = CreateOnePagerForm.new(
+    @create_one_pager_form = CreateOnePagerForm.new(
       slug: one_pager_params[:slug],
       name: one_pager_params[:name],
+      theme: theme,
       aggregate_id: id
     )
 
-    binding.pry
-    if create_one_pager_form.submit(command_bus)
+    if @create_one_pager_form.submit(command_bus)
       flash[:notice] = 'One Pager created successfully'
-      redirect_to edit_one_pager_path(create_one_pager_form.slug)
+      redirect_to edit_one_pager_path(@create_one_pager_form.slug)
     else
-      flash.now[:error] = create_one_pager_form.errors.full_messages
+      flash.now[:error] = @create_one_pager_form.errors.full_messages
       render :new
     end
   end

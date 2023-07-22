@@ -70,6 +70,14 @@ module Infra
       true
     end
 
+    def persisted?
+      existing_data.present?
+    end
+
+    def new_record?
+      !persisted?
+    end
+
     private
 
     def process_commands

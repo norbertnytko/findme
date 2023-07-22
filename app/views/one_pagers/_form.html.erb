@@ -1,6 +1,7 @@
 <%= form_for(
   one_pager,
   as: :one_pager,
+  url: one_pager.persisted? ? one_pager_path(one_pager.slug) : one_pagers_path,
   class: "p-10 card bg-base-200") do |form| %>
 
   <div class="form-control">
