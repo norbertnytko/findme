@@ -72,3 +72,5 @@ end
 
 
 gem "tailwindcss-rails", "~> 2.0"
+
+gem "redis"
