@@ -96,4 +96,116 @@ module Infra
       existing_data[field.to_s] != public_send(field)
     end
   end
+
+  class ApiForm
+    class << self
+      def params(&block)
+        @contract = Dry::Validation.Contract(&block)
+      end
+      
+      def commands(&block)
+        @commands = block
+      end
+      
+      def build(command_class)
+        CommandBuilder.new(command_class)
+      end
+
+      def contract
+        @contract
+      end
+
+      def command_builder
+        @commands
+      end
+    end
+
+    def initialize(params = {})
+      @params = params
+    end
+
+    def validate
+      @result = self.class.contract.new.call(@params)
+      @result.success?
+    end
+
+    def submit(command_bus)
+      commands.each do |command|
+        command_bus.(command)
+      end
+    end
+
+    def commands
+      instance_eval(&self.class.command_builder)
+    end
+
+    def errors
+      @result.errors.to_h
+    end
+
+    class CommandBuilder
+      def initialize(command_class)
+        @command_class = command_class
+        @fields = nil
+      end
+
+      def with(fields)
+        @fields = fields
+        self
+      end
+
+      def build(params)
+        args = @fields ? params.slice(*@fields) : params
+        @command_class.new(args)
+      end
+    end
+  end
+end
+
+
+class CommandsBuilder
+  attr_reader :commands
+
+  def initialize
+    @commands = []
+  end
+
+  def build(form)
+    commands.map { |command| command.new(form).build }
+  end
+
+  def build(klass)
+    commands << CommandBuilder.new(klass)
+  end
+
+  class CommandBuilder
+    attr_reader :klass, :fields
+
+    def initialize(klass)
+      @klass = klass
+      @fields = nil
+    end
+
+    def with(fields)
+      @fields = fields
+      self
+    end
+
+    def build(form)
+      attrs = fields ? fields.map { |f| [f, form.public_send(f)] }.to_h : form.params.to_h
+      klass.new(attrs)
+    end
+  end
+end
+
+class OnePagerForm < ::Infra::ApiForm
+  params do
+    option(:name).value(:string)
+    option(:theme).value(OnePagers::Types::Theme.optional)
+  end
+
+  commands do
+    build(OnePagers::Commands::SelectTheme).with(%i(theme))
+    build(OnePagers::Commands::AssignName).with(%i(name))
+  end
 end

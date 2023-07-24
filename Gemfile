@@ -54,6 +54,7 @@ gem "bootsnap", require: false
 gem "rails_event_store"
 
 gem "dry-struct"
+gem "dry-validation"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

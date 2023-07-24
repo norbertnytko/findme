@@ -82,13 +82,25 @@ GEM
       railties (>= 6.0.0)
     date (3.3.3)
     diff-lcs (1.5.0)
+    dry-configurable (1.1.0)
+      dry-core (~> 1.0, < 2)
+      zeitwerk (~> 2.6)
     dry-core (1.0.0)
       concurrent-ruby (~> 1.0)
       zeitwerk (~> 2.6)
     dry-inflector (1.0.0)
+    dry-initializer (3.1.1)
     dry-logic (1.5.0)
       concurrent-ruby (~> 1.0)
       dry-core (~> 1.0, < 2)
+      zeitwerk (~> 2.6)
+    dry-schema (1.13.2)
+      concurrent-ruby (~> 1.0)
+      dry-configurable (~> 1.0, >= 1.0.1)
+      dry-core (~> 1.0, < 2)
+      dry-initializer (~> 3.0)
+      dry-logic (>= 1.4, < 2)
+      dry-types (>= 1.7, < 2)
       zeitwerk (~> 2.6)
     dry-struct (1.6.0)
       dry-core (~> 1.0, < 2)
@@ -100,6 +112,12 @@ GEM
       dry-core (~> 1.0)
       dry-inflector (~> 1.0)
       dry-logic (~> 1.4)
+      zeitwerk (~> 2.6)
+    dry-validation (1.10.0)
+      concurrent-ruby (~> 1.0)
+      dry-core (~> 1.0, < 2)
+      dry-initializer (~> 3.0)
+      dry-schema (>= 1.12, < 2)
       zeitwerk (~> 2.6)
     erubi (1.12.0)
     globalid (1.1.0)
@@ -258,6 +276,7 @@ DEPENDENCIES
   bootsnap
   cssbundling-rails
   dry-struct
+  dry-validation
   jbuilder
   jsbundling-rails
   pg (~> 1.1)
