@@ -13,10 +13,20 @@ export default class extends Controller {
     const selectedLabel = event.currentTarget.parentElement;
     selectedLabel.classList.add("outline");
   
-    await fetch(this.element.action, {
+    fetch(this.element.action, {
       method: this.element.method,
       body: new FormData(this.element)
+    })
+    .then(response => {
+      if (response.ok) {
+        let iframe = document.getElementById("iframe_preview");
+        iframe.src = iframe.src;
+      } else {
+        console.error('Fetch request failed:', response.statusText);
+      }
+    })
+    .catch(error => {
+      console.error('Fetch error:', error);
     });
-
   }
 }
