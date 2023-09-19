@@ -197,15 +197,3 @@ class CommandsBuilder
     end
   end
 end
-
-class OnePagerForm < ::Infra::ApiForm
-  params do
-    option(:name).value(:string)
-    option(:theme).value(OnePagers::Types::Theme.optional)
-  end
-
-  commands do
-    build(OnePagers::Commands::SelectTheme).with(%i(theme))
-    build(OnePagers::Commands::AssignName).with(%i(name))
-  end
-end

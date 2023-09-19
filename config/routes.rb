@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root to: 'one_pagers#index'
+  root to: 'pages#index'
 
   resources :one_pagers, param: :slug do
     resources :links, only: [:create, :update, :destroy, :edit] do
