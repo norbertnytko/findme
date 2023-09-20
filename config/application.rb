@@ -33,5 +33,10 @@ module FindMe
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    config.middleware.insert(0, Rack::ReverseProxy) do
+      reverse_proxy /^\/$/, 'https://landing-obite-decbcf71e92d.herokuapp.com/', preserve_host: true
+      reverse_proxy /^\/_next/, 'https://landing-obite-decbcf71e92d.herokuapp.com/', preserve_host: true
+    end
   end
 end
